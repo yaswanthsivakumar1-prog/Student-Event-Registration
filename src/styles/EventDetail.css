@@ -1,0 +1,93 @@
+.event-detail-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.back-btn {
+  background: none;
+  border: 1px solid #007bff;
+  color: #007bff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.back-btn:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.event-detail {
+  background: white;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-detail img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.event-detail h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.event-meta {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.event-meta p {
+  margin: 8px 0;
+  color: #555;
+  font-size: 15px;
+}
+
+.description {
+  margin-bottom: 20px;
+}
+
+.description h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.description p {
+  color: #666;
+  line-height: 1.6;
+}
+
+.capacity-info {
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.register-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s;
+}
+
+.register-btn:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.register-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
