@@ -1,5 +1,5 @@
 // pages/EventDetail.jsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { eventsAPI, registrationAPI } from '../services/api';
 import '../styles/EventDetail.css';
@@ -13,11 +13,7 @@ function EventDetail() {
   const [registering, setRegistering] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadEventDetails();
-  }, [id]);
-
-  const loadEventDetails = async () => {
+  const loadEventDetails = useCallback(async () => {
     try {
       setLoading(true);
       const response = await eventsAPI.getEventById(id);
@@ -39,7 +35,11 @@ function EventDetail() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    loadEventDetails();
+  }, [loadEventDetails]);
 
   const handleRegister = async () => {
     try {
