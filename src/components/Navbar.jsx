@@ -1,17 +1,14 @@
 // components/Navbar.jsx
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import '../styles/Navbar.css';
 
 function Navbar() {
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem('token');
-  const raw = localStorage.getItem('user');
-  const user = raw && raw !== 'undefined' ? JSON.parse(raw) : null;
-
+  const { isAuthenticated, isAdmin, user, logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    logout();
     navigate('/login');
   };
 
@@ -22,22 +19,39 @@ function Navbar() {
           🎓 Event Registration
         </div>
 
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <div className="nav-links">
-            <button onClick={() => navigate('/')}>Events</button>
-            <button onClick={() => navigate('/my-registrations')}>My Registrations</button>
-            <button onClick={() => navigate('/users')}>Users</button>
-            <button onClick={() => navigate('/profile')}>
-              {user?.name}
+            {/* Student Links */}
+            {!isAdmin && (
+              <>
+                <button onClick={() => navigate('/')} className="nav-btn">Events</button>
+                <button onClick={() => navigate('/my-registrations')} className="nav-btn">My Registrations</button>
+              </>
+            )}
+
+            {/* Admin Links - Only for admins */}
+            {isAdmin && (
+              <>
+                <button onClick={() => navigate('/admin/dashboard')} className="nav-btn admin-btn">Dashboard</button>
+                <button onClick={() => navigate('/admin/events')} className="nav-btn admin-btn">Manage Events</button>
+                <button onClick={() => navigate('/admin/users')} className="nav-btn admin-btn">Manage Users</button>
+              </>
+            )}
+
+            {/* Profile */}
+            <button onClick={() => navigate('/profile')} className="nav-btn profile-btn">
+              👤 {user?.name}
             </button>
-            <button onClick={handleLogout} className="logout-btn">
+
+            {/* Logout */}
+            <button onClick={handleLogout} className="nav-btn logout-btn">
               Logout
             </button>
           </div>
         ) : (
           <div className="nav-links">
-            <button onClick={() => navigate('/login')}>Login</button>
-            <button onClick={() => navigate('/signup')}>Sign Up</button>
+            <button onClick={() => navigate('/login')} className="nav-btn">Login</button>
+            <button onClick={() => navigate('/signup')} className="nav-btn">Sign Up</button>
           </div>
         )}
       </div>

@@ -2,31 +2,31 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import '../styles/Auth.css';
 
 function Signup() {
   const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSignup = async (e) => {
     e.preventDefault();
 
-    // Validation
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !username || !email || !password || !confirmPassword) {
       setError('Please fill all fields');
       return;
     }
-
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-
     if (password.length < 6) {
       setError('Password must be at least 6 characters');
       return;
@@ -36,15 +36,19 @@ function Signup() {
       setLoading(true);
       setError('');
 
-      // Call signup API
-      const response = await authAPI.signup(name, email, password);
+      // ✅ Matches backend: (firstName, username, email, password)
+      const response = await authAPI.signup(name, username, email, password);
+      const { token, user } = response.data;
 
-      // Auto login after signup
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      // ✅ Correct order
+      login(user, token);
 
-      // Redirect to home
-      navigate('/');
+      // ✅ Role-based redirect
+      if (user.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setError(err.response?.data?.message || 'Signup failed');
     } finally {
@@ -60,12 +64,24 @@ function Signup() {
         {error && <div className="error-message">{error}</div>}
 
         <div className="form-group">
-          <label>Name:</label>
+          <label>Full Name:</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
+            placeholder="Enter your full name"
+            autoComplete="name"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Username:</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Choose a username"
+            autoComplete="username"
           />
         </div>
 
@@ -76,6 +92,7 @@ function Signup() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter your email"
+            autoComplete="email"
           />
         </div>
 
@@ -85,7 +102,8 @@ function Signup() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter password (min 6 chars)"
+            placeholder="Min 6 characters"
+            autoComplete="new-password"
           />
         </div>
 
@@ -95,7 +113,8 @@ function Signup() {
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirm password"
+            placeholder="Re-enter your password"
+            autoComplete="new-password"
           />
         </div>
 
@@ -103,10 +122,7 @@ function Signup() {
           {loading ? 'Creating account...' : 'Sign Up'}
         </button>
 
-        <p>
-          Already have account?{' '}
-          <a href="/login">Login here</a>
-        </p>
+        <p>Already have an account? <a href="/login">Login here</a></p>
       </form>
     </div>
   );

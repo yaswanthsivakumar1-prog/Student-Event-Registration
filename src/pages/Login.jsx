@@ -2,33 +2,40 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authAPI } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import '../styles/Auth.css';
 
 function Login() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent page reload
-
-    if (!email || !password) {
+    e.preventDefault();
+    if (!username || !password) {
       setError('Please fill all fields');
       return;
     }
-
     try {
       setLoading(true);
       setError('');
+      const response = await authAPI.login(username, password);
+      const { token, user } = response.data;
 
-      const response = await authAPI.login(email, password);
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
-      navigate('/');
+      // ✅ Correct order
+      login(user, token);
+
+      // ✅ Redirect based on role
+      if (user.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+      setError(err.response?.data?.message || 'Invalid username or password.');
     } finally {
       setLoading(false);
     }
@@ -42,12 +49,13 @@ function Login() {
         {error && <div className="error-message">{error}</div>}
 
         <div className="form-group">
-          <label>Email:</label>
+          <label>Username:</label>
           <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter your username"
+            autoComplete="username"
           />
         </div>
 
@@ -58,6 +66,7 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter your password"
+            autoComplete="current-password"
           />
         </div>
 
@@ -66,7 +75,7 @@ function Login() {
         </button>
 
         <p>
-          Don't have account?{' '}
+          Don't have an account?{' '}
           <a href="/signup">Sign up here</a>
         </p>
       </form>

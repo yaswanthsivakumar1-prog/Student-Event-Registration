@@ -30,25 +30,49 @@
   align-items: center;
 }
 
-.nav-links button {
+.nav-btn {
   background: none;
   color: white;
   border: none;
   cursor: pointer;
   padding: 8px 12px;
   border-radius: 4px;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   font-size: 14px;
+  font-weight: 500;
 }
 
-.nav-links button:hover {
+.nav-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.nav-links button.logout-btn {
-  background-color: #dc3545;
+/* Admin Navigation Buttons */
+.nav-btn.admin-btn {
+  color: #ffc107;
+  font-weight: 600;
 }
 
-.nav-links button.logout-btn:hover {
+.nav-btn.admin-btn:hover {
+  background-color: rgba(255, 193, 7, 0.2);
+}
+
+/* Profile Button */
+.nav-btn.profile-btn {
+  background-color: rgba(52, 152, 219, 0.3);
+  border: 2px solid rgba(52, 152, 219, 0.5);
+}
+
+.nav-btn.profile-btn:hover {
+  background-color: rgba(52, 152, 219, 0.5);
+  border-color: rgba(52, 152, 219, 0.8);
+}
+
+/* Logout Button */
+.nav-btn.logout-btn {
+  background-color: #dc3545;
+  font-weight: 600;
+}
+
+.nav-btn.logout-btn:hover {
   background-color: #c82333;
 }
