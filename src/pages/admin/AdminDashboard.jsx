@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { authAPI, eventsAPI } from '../../services/api';
+import { authAPI } from '../../services/api';
 import '../../styles/admin/AdminDashboard.css';
 
 function AdminDashboard() {
