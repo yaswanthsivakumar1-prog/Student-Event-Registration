@@ -1,0 +1,11 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+
+[build.environment]
+  # Set your backend API URL here if needed.
+  # REACT_APP_API_URL = "https://your-backend-domain.com/api"
+
+[dev]
+  command = "npm start"
+  port = 3000
