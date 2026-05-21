@@ -48,6 +48,9 @@ export const authAPI = {
   getUserRegistrations: (userId) =>
     apiClient.get(`/admin/users/${userId}/registrations`),
 
+  deleteUser: (userId) =>
+    apiClient.delete(`/admin/users/${userId}`),
+
   getDashboardStats: () =>
     apiClient.get('/admin/dashboard'),
 };

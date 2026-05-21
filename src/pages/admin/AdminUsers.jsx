@@ -44,6 +44,22 @@ function AdminUsers() {
     }
   };
 
+  const handleDeleteUser = async (userId) => {
+    const confirmDelete = window.confirm('Delete this user and remove their access? This cannot be undone.');
+    if (!confirmDelete) return;
+
+    try {
+      await authAPI.deleteUser(userId);
+      setUsers(prev => prev.filter(user => user._id !== userId));
+      if (selectedUser?._id === userId) {
+        setSelectedUser(null);
+        setUserRegistrations([]);
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to delete user');
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -199,6 +215,12 @@ function AdminUsers() {
                               className="btn-view"
                             >
                               📋 View Registrations
+                            </button>
+                            <button
+                              onClick={() => handleDeleteUser(user._id)}
+                              className="btn-delete"
+                            >
+                              Delete
                             </button>
                           </td>
                         </tr>

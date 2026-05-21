@@ -232,9 +232,9 @@
   gap: 10px;
 }
 
-.btn-view {
+.btn-view,
+.btn-delete {
   padding: 8px 12px;
-  background: #3498db;
   color: white;
   border: none;
   border-radius: 4px;
@@ -244,8 +244,20 @@
   transition: all 0.3s ease;
 }
 
+.btn-view {
+  background: #3498db;
+}
+
 .btn-view:hover {
   background: #2980b9;
+}
+
+.btn-delete {
+  background: #e74c3c;
+}
+
+.btn-delete:hover {
+  background: #c0392b;
 }
 
 /* Registrations Section */
