@@ -6,6 +6,7 @@ function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [toast, setToast] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [userRegistrations, setUserRegistrations] = useState([]);
   const [showForm, setShowForm] = useState(false);
@@ -20,6 +21,12 @@ function AdminUsers() {
   useEffect(() => {
     loadUsers();
   }, []);
+
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(null), 3000);
+    return () => clearTimeout(timer);
+  }, [toast]);
 
   const loadUsers = async () => {
     try {
@@ -45,9 +52,6 @@ function AdminUsers() {
   };
 
   const handleDeleteUser = async (userId) => {
-    const confirmDelete = window.confirm('Delete this user and remove their access? This cannot be undone.');
-    if (!confirmDelete) return;
-
     try {
       await authAPI.deleteUser(userId);
       setUsers(prev => prev.filter(user => user._id !== userId));
@@ -55,8 +59,12 @@ function AdminUsers() {
         setSelectedUser(null);
         setUserRegistrations([]);
       }
+      setToast({ type: 'success', message: 'User deleted successfully.' });
+      setError('');
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to delete user');
+      const message = err.response?.data?.message || 'Failed to delete user';
+      setToast({ type: 'error', message });
+      console.error(err);
     }
   };
 
@@ -112,6 +120,13 @@ function AdminUsers() {
           {showForm ? '❌ Cancel' : '✅ Add User'}
         </button>
       </div>
+
+      {toast && (
+        <div className={`toast toast-${toast.type}`}>
+          <span>{toast.message}</span>
+          <button onClick={() => setToast(null)} className="toast-close">×</button>
+        </div>
+      )}
 
       {error && <div className="error-message">{error}</div>}
 

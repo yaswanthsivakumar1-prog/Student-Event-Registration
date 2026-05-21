@@ -260,6 +260,59 @@
   background: #c0392b;
 }
 
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 16px 22px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 280px;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12);
+  animation: slideIn 0.25s ease-out;
+  z-index: 1001;
+}
+
+.toast-success {
+  background: #d4edda;
+  color: #155724;
+  border-left: 4px solid #28a745;
+}
+
+.toast-error {
+  background: #f8d7da;
+  color: #721c24;
+  border-left: 4px solid #dc3545;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.8;
+  padding: 0;
+}
+
+.toast-close:hover {
+  opacity: 1;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 /* Registrations Section */
 .registrations-section {
   background: white;
